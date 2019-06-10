@@ -10,7 +10,7 @@ import UIKit
 
 class TodoViewController: UITableViewController {
 
-  let itemArray = ["Find Bo", "Buy Macbook pro", "Each healthy"]
+  var itemArray = ["Find Bo", "Buy Macbook pro", "Each healthy"]
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -57,5 +57,32 @@ class TodoViewController: UITableViewController {
     }
   }
    */
+  
+  
+  //MARK - Add New Items
+  @IBAction func addItem(_ sender: UIBarButtonItem) {
+    var textField = UITextField()
+    
+    let alert = UIAlertController(title: "Add New ToDo Item", message: "", preferredStyle: .alert)
+    
+    let actionAdd = UIAlertAction(title: "Add Item", style: .default) { (action) in
+      if textField.text!.count > 0 {
+        self.itemArray.append(textField.text!)
+        self.tableView.reloadData()
+      }
+    }
+    let actionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+    
+    alert.addTextField { (alerttextField) in
+      alerttextField.placeholder = "Create new item"
+      textField = alerttextField // using the object here .text not be set as this is executed when the [+] is clicked
+                                 // the action closure above is called when the button i clicked
+
+    }
+    alert.addAction(actionAdd)
+    alert.addAction(actionCancel)
+    
+    present(alert, animated: true, completion: nil)
+  }
 }
 
