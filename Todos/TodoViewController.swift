@@ -9,13 +9,20 @@
 import UIKit
 
 class TodoViewController: UITableViewController {
-
+  
+  // UserData step:1
+  let defaults = UserDefaults.standard
+  
   var itemArray = ["Find Bo", "Buy Macbook pro", "Each healthy"]
   
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view, typically from a nib.
     
+    // UserData step:3
+    if let itemArrayValue = defaults.array(forKey: "TodoListArray") as? [String] {
+      itemArray = itemArrayValue
+    }
     
 // only for custom cells
    // self.tableView.register(UINib(nibName: "ToDoCell", bundle: nil), forCellReuseIdentifier: "ToDoItemCell")
@@ -68,6 +75,9 @@ class TodoViewController: UITableViewController {
     let actionAdd = UIAlertAction(title: "Add Item", style: .default) { (action) in
       if textField.text!.count > 0 {
         self.itemArray.append(textField.text!)
+        // UserData step:2
+        self.defaults.set(self.itemArray, forKey: "TodoListArray")
+
         self.tableView.reloadData()
       }
     }
