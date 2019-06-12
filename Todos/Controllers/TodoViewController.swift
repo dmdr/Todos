@@ -10,11 +10,7 @@ import UIKit
 
 class TodoViewController: UITableViewController {
   
-//  var itemArray = ["Find Bo", "Buy Macbook pro", "Each healthy"]
   var itemArray = [Item]()
-
-  // UserData step:1
-  //let defaults = UserDefaults.standard
 
   // NSCoder step:1
   let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
@@ -26,16 +22,11 @@ class TodoViewController: UITableViewController {
     // debug show path where our plist file wil go
     //let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
     //print( dataFilePath )
-    
-    // UserData/NSCoder step:3
-//if let itemArrayValue = defaults.array(forKey: "TodoListArray") as? [Item] {
- //     itemArray = itemArrayValue
-  // }
 
     loadItems();
 
     // only for custom cells
-   // self.tableView.register(UINib(nibName: "ToDoCell", bundle: nil), forCellReuseIdentifier: "ToDoItemCell")
+    // self.tableView.register(UINib(nibName: "ToDoCell", bundle: nil), forCellReuseIdentifier: "ToDoItemCell")
     
 
   }
@@ -69,16 +60,6 @@ class TodoViewController: UITableViewController {
 
   }
 
-  // remove all checkmarks
-  /*
-  func removeAllCheckMarks() {
-    for x in 0...itemArray.count {
-      let xx : IndexPath = IndexPath(item: x, section: 0)
-      tableView.cellForRow(at: xx)?.accessoryType = .none
-    }
-  }
-   */
-  
   
   //MARK - Add New Items
   @IBAction func addItem(_ sender: UIBarButtonItem) {
@@ -133,7 +114,6 @@ class TodoViewController: UITableViewController {
         print("Error decoding data, \(error)")
       }
     }
-   // self.tableView.reloadData()
   }
 
 }
