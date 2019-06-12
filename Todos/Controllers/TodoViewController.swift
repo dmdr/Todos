@@ -13,22 +13,23 @@ class TodoViewController: UITableViewController {
   // UserData step:1
   let defaults = UserDefaults.standard
   
-  var itemArray = ["Find Bo", "Buy Macbook pro", "Each healthy"]
+//  var itemArray = ["Find Bo", "Buy Macbook pro", "Each healthy"]
+  var itemArray = [Item]()
   
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view, typically from a nib.
     
     // UserData step:3
-    if let itemArrayValue = defaults.array(forKey: "TodoListArray") as? [String] {
-      itemArray = itemArrayValue
-    }
-    
+    if let itemArrayValue = defaults.array(forKey: "TodoListArray") as? [Item] {
+       itemArray = itemArrayValue
+   }
+ 
 // only for custom cells
    // self.tableView.register(UINib(nibName: "ToDoCell", bundle: nil), forCellReuseIdentifier: "ToDoItemCell")
     
+
   }
-  
   
   // MARK - Tableview Datasource Methods
   
@@ -40,7 +41,9 @@ class TodoViewController: UITableViewController {
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath) //as! CustomMessageCell
 
-    cell.textLabel?.text = itemArray[indexPath.row]
+    let item = itemArray[indexPath.row]
+    cell.textLabel?.text = item.sTitle
+    cell.accessoryType = item.bDone ? .checkmark : .none
 
     return cell
   }
@@ -49,10 +52,12 @@ class TodoViewController: UITableViewController {
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     //print( "didSelectRowAt \(itemArray[indexPath.row])")
     
-   // removeAllCheckMarks()
+    itemArray[indexPath.row].bDone = !itemArray[indexPath.row].bDone
+    tableView.reloadData()
+    
     // multiple check allowed
-    tableView.cellForRow(at: indexPath)?.accessoryType = ( tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark ) ? .none : .checkmark
     tableView.deselectRow(at: indexPath, animated: true)
+
   }
 
   // remove all checkmarks
@@ -74,9 +79,13 @@ class TodoViewController: UITableViewController {
     
     let actionAdd = UIAlertAction(title: "Add Item", style: .default) { (action) in
       if textField.text!.count > 0 {
-        self.itemArray.append(textField.text!)
+        let newItem = Item()
+        newItem.sTitle = textField.text!
+        newItem.bDone = false
+        self.itemArray.append( newItem )
         // UserData step:2
-        self.defaults.set(self.itemArray, forKey: "TodoListArray")
+
+//        self.defaults.set(self.itemArray, forKey: "TodoListArray")
 
         self.tableView.reloadData()
       }

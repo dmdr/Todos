@@ -17,6 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     // Override point for customization after application launch.
     print( NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last! as String)
+    // cd to thei path
+    // cd ../Library//Preferences/
+    // you can access the file UserDefaults.standard file here and remove it if required
     return true
   }
 
