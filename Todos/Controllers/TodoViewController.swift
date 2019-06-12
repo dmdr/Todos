@@ -10,22 +10,31 @@ import UIKit
 
 class TodoViewController: UITableViewController {
   
-  // UserData step:1
-  let defaults = UserDefaults.standard
-  
 //  var itemArray = ["Find Bo", "Buy Macbook pro", "Each healthy"]
   var itemArray = [Item]()
+
+  // UserData step:1
+  //let defaults = UserDefaults.standard
+
+  // NSCoder step:1
+  let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+  
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    // Do any additional setup after loading the view, typically from a nib.
     
-    // UserData step:3
-    if let itemArrayValue = defaults.array(forKey: "TodoListArray") as? [Item] {
-       itemArray = itemArrayValue
-   }
- 
-// only for custom cells
+    // debug show path where our plist file wil go
+    //let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+    //print( dataFilePath )
+    
+    // UserData/NSCoder step:3
+//if let itemArrayValue = defaults.array(forKey: "TodoListArray") as? [Item] {
+ //     itemArray = itemArrayValue
+  // }
+
+    loadItems();
+
+    // only for custom cells
    // self.tableView.register(UINib(nibName: "ToDoCell", bundle: nil), forCellReuseIdentifier: "ToDoItemCell")
     
 
@@ -53,7 +62,7 @@ class TodoViewController: UITableViewController {
     //print( "didSelectRowAt \(itemArray[indexPath.row])")
     
     itemArray[indexPath.row].bDone = !itemArray[indexPath.row].bDone
-    tableView.reloadData()
+    saveDataToDevice()
     
     // multiple check allowed
     tableView.deselectRow(at: indexPath, animated: true)
@@ -83,11 +92,7 @@ class TodoViewController: UITableViewController {
         newItem.sTitle = textField.text!
         newItem.bDone = false
         self.itemArray.append( newItem )
-        // UserData step:2
-
-//        self.defaults.set(self.itemArray, forKey: "TodoListArray")
-
-        self.tableView.reloadData()
+        self.saveDataToDevice()
       }
     }
     let actionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -103,5 +108,33 @@ class TodoViewController: UITableViewController {
     
     present(alert, animated: true, completion: nil)
   }
+  
+  
+  //
+  func saveDataToDevice() {
+    let encoder = PropertyListEncoder()
+    do {
+      let data = try encoder.encode( itemArray )
+      try data.write(to: dataFilePath!)
+    } catch {
+      print("Error encoding item array, \(error)")
+    }
+    
+    self.tableView.reloadData()
+  }
+ 
+  //
+  func loadItems() {
+    if let data = try? Data(contentsOf: dataFilePath! ) {
+      let decoder = PropertyListDecoder()
+      do {
+        itemArray = try decoder.decode([Item].self, from: data)
+      } catch {
+        print("Error decoding data, \(error)")
+      }
+    }
+   // self.tableView.reloadData()
+  }
+
 }
 

@@ -8,14 +8,11 @@
 
 import Foundation
 
-class Item {
+// for NSCoder added : Encodable, Decodable (or just Codable frmo swift 4)
+//
+class Item : Codable {
   var sTitle : String = ""
   var bDone : Bool = false
-
-  init() {
-    //sTitle = ""
-    //bDone = false
-  }
 
 }
 
